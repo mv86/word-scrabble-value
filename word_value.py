@@ -12,6 +12,11 @@ SCRABBLE_SCORES = [(1, "E A O I N R T L S U"), (2, "D G"), (3, "B C M P"),
                    (4, "F H V W Y"), (5, "K"), (8, "J X"), (10, "Q Z")]
 
 
+# (* = Blank/Wild)
+TILE_QUANTITY = [(1, "J K Q X Z"), (2, "B C F H M P V W Y *"), (3, "G"), 
+                 (4, "D L S U"), (6, "N R T"), (8, "O"), (9, "A I"), (12, "E")]
+
+
 LETTER_SCORES = {letter: score for score, letters in SCRABBLE_SCORES
                  for letter in letters.split()}
 
@@ -20,7 +25,7 @@ with open('word_list.txt') as word_list:
     DICTIONARY = [word.strip() for word in word_list]
 
 
-def top_n_scrabble_words(words=None, n=1):
+def top_n_scrabble_words(words=None, *, n=1):
     """ Return list of top n scrabble word scores from word list. 
 
         Args:
@@ -41,7 +46,7 @@ def words_values(words):
     return [(word, word_value(word)) for word in words]
 
 
-def word_value(word):
+def word_value(word:str) -> int:
     """Return scrabble value for given word. Return 0 for non-words."""
     try:
         word = word.replace(' ', '')

@@ -1,3 +1,4 @@
+"""Test module for word_value."""
 import pytest
 
 from word_value import word_value, words_values, top_n_scrabble_words
@@ -30,14 +31,14 @@ def test_word_values():
 def test_top_n_scrabble_words():
     words = ['b aD! ', 'good', 'amazing']
 
-    # Call with no n argument returns top word
+    # Call with no 'n' argument returns top word
     top_word = top_n_scrabble_words(words)
     word, score = top_word[0]
     assert word == 'amazing'
     assert score == 19
 
     # Can select top n words
-    top_word, second_word, third_word = top_n_scrabble_words(words, 3)
+    top_word, second_word, third_word = top_n_scrabble_words(words, n=3)
     assert top_word == ('amazing', 19)
     assert second_word == ('good', 6)
     assert third_word == ('b aD! ', 0)
