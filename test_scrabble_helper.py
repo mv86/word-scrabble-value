@@ -1,8 +1,8 @@
 """Test module for word_value."""
 import pytest
 
-from word_value import (new_pouch, word_in_dictionary, word_value, 
-                        words_values, top_n_scrabble_words)
+from scrabble_helper import (new_pouch, word_in_dictionary, word_value, 
+                             words_values, top_n_scrabble_words)
 
 
 @pytest.mark.parametrize('word, rt_val', [
