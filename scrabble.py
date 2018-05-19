@@ -1,36 +1,26 @@
 """Simple scrabble game."""
-import random
+from player import Player
+from scrabble_helper import player_round, print_game_stats
+from word_value import new_pouch
 
-from word_value import TILE_QUANTITY
+# Enhancement: Add functionaliry for 2 player game
+
+def scrabble():
+    """Main Scrabble loop."""
+    print('\nWelcome to scrabble, press CTRL+C to quit any time.\n')
+    pouch = new_pouch()
+    player = Player()
+    rounds = 0
+    while player.points < 100:
+        player_word, optimal_words = player_round(player, pouch)
+        print_game_stats(player, player_word, optimal_words)
+        rounds += 1
+    print(f'You scored {player.points} in {rounds} rounds! Goodbye!')
 
 
-
-def create_tiles() -> str:
-    "Return str of all tiles in scrabble game."
-    all_tiles = []
-    for tiles in TILE_QUANTITY:
-        quantity, letters = tiles[0], tiles[1].split()
-        for letter in letters:
-            letter_quantity = letter * quantity
-            all_tiles.append(letter_quantity)
-    return ''.join(all_tiles)
-
-
-def get_random_seven():
-    """Return list of seven random tiles."""
-    tiles = create_tiles()
-    return random.sample(tiles, 7)
-
-# print to screen
-
-# user input word
-# - validate all letters in word and no duplicate cheating
-# lookup word value
-# print to screen
-
-# lookup optimal word value
-# find combination of every word with score (logic needed)
-# print to screen
-
-# calculate users total score
-# print total score to screen
+if __name__ == '__main__':
+    try:
+        scrabble()
+    except (KeyboardInterrupt, EOFError):  # Player wants to quit
+        print('\n\nYou got it, goodbye!\n')
+    
