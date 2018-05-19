@@ -1,88 +1,84 @@
-"""Contains helper functions for scrabble game.
+"""Module to generate scrabble constants for game setup and calculate scrabble word scores.
+   
+   Constants:
+            DICTIONARY: Set of words found at /usr/share/dict/words
+            LETTER_SCORES: Dict of letter: score
+            SCRABBLE_SCORES: List of tuples (score, letters)
+            TILE_QUANTITY: List of tuples (quantity, letters)
    Functions:
-            player_round()
-            print_game_stats()
+            new_pouch()
+            top_n_scrabble_words()
+            word_in_dictionary()
+            word_value()
+            words_values()
 """
-from typing import List, NamedTuple, Tuple
-from collections import namedtuple
-from itertools import filterfalse, permutations
-
-from player import Player
-from word_value import word_value, word_in_dictionary
+from typing import Iterable, List, Tuple
+import random
 
 
-Word = namedtuple('Word', 'word value')
+SCRABBLE_SCORES = [(1, "E A O I N R T L S U"), (2, "D G"), (3, "B C M P"),
+                   (4, "F H V W Y"), (5, "K"), (8, "J X"), (10, "Q Z")]
 
 
-def player_round(player: Player, pouch: List[str]) -> Tuple[NamedTuple, List[NamedTuple]]:
-    """One round of scrabble game."""
-    player.fetch_tiles(pouch)
-    player.display_hand()
-    word = _prompt_for_word(player)     
-    value = word_value(word)
-    player.points += value
-    player_word = Word(word.upper(), value)
-    optimal_words = _get_optimal_words(player.hand)
-    _remove_tiles(word, player.hand)
-    return player_word, optimal_words
+# Enhancement: Add blank/wild tile for enhanced functionality (symbol = *, quantity = 2)
+TILE_QUANTITY = [(1, "J K Q X Z"), (2, "B C F H M P V W Y"), (3, "G"), 
+                 (4, "D L S U"), (6, "N R T"), (8, "O"), (9, "A I"), (12, "E")]
 
 
-def print_game_stats(player: Player, player_word: NamedTuple, optimal_words: List[NamedTuple]):
-    """Display current word_score, any optimal words and player points."""
-    opt_words = [word.upper() for word, _ in optimal_words]
-    opt_value = optimal_words[0].value
-    print(f'\nYour word {player_word.word} scored {player_word.value}!\n')
-    print(f"Optimal word(s) for hand: {', '.join(opt_words)}, value: {opt_value}\n")
-    print(f'Total points = {player.points}.\n')
+LETTER_SCORES = {letter: score for score, letters in SCRABBLE_SCORES
+                 for letter in letters.split()}
 
 
-def _prompt_for_word(player: Player) -> str:
-    """Prompt player for word and validate."""
-    valid_word = False
-    while not valid_word:
-        word = player.word_choice()
-        valid_word = _is_valid_word(word, player.hand)
-    return word
+with open('word_list.txt') as word_list:
+    DICTIONARY = set(word.strip() for word in word_list)
 
 
-def _is_valid_word(word: str, hand: List[str]) -> bool:
-    """Validate player word choice."""
-    if word_in_dictionary(word) and _word_in_hand(word, hand):
-        return True
-    print(f'\nPlease choose a valid word!\n')
-    return False
+def word_in_dictionary(word: str) -> bool:
+    """Check dictionary for word."""
+    try:
+        return word.lower().strip() in DICTIONARY
+    except (AttributeError, TypeError):  # Not valid words
+        return False
 
 
-def _word_in_hand(word: str, hand: List[str]) -> bool:
-    """Test all letters for word are in users current hand."""
-    letters_in_hand = []
-    test_hand = hand[:]  # Don't want to pop from real hand
-    for letter in word:
-        for idx, tile in enumerate(test_hand):
-            if letter.lower() == tile.lower():
-                letters_in_hand.extend(test_hand.pop(idx))
-                break
-    return len(word) == len(letters_in_hand)
+def new_pouch() -> List[str]:
+    """Return shuffled list of all tiles in scrabble game."""
+    pouch = []
+    for tiles in TILE_QUANTITY:
+        quantity, letters = tiles[0], tiles[1].split()
+        for letter in letters:
+            all_letters = letter * quantity
+            pouch.extend(list(all_letters))
+    random.shuffle(pouch)
+    return pouch
 
 
-def _remove_tiles(word: str, hand: List[str]):
-    """Remove tiles for chosen word from players hand."""
-    for letter in word:
-        for idx, tile in enumerate(hand):
-            if letter.lower() == tile.lower():
-                hand.pop(idx)
-                break 
+def top_n_scrabble_words(words=None, *, n=1) -> List[Tuple]:
+    """ Return list of top n scrabble word scores from word list. 
+
+        Args:
+            words=None: Iterable of words used to calculate scores.
+                        Default to words list found at /usr/share/dict/words.
+            n=1: Limit of highest score words to return,
+    """
+    if not words:
+        scrabble_values = words_values(DICTIONARY)
+    else:
+        scrabble_values = words_values(words)
+    scrabble_values.sort(key=lambda x: x[1], reverse=True)
+    return scrabble_values[:n]
 
 
-def _get_optimal_words(hand: List[str]) -> List[NamedTuple]:
-    """Return optimal words from all permutations of given hand."""
-    words = set(''.join(word)for perm_size in range(2, 8)
-                for word in permutations(hand, perm_size))
+def words_values(words: Iterable) -> List[Tuple]:
+    """Take an iterable of words and return a list of tuples (word, scrabble_value).""" 
+    return [(word, word_value(word)) for word in words]
 
-    valid_words = [Word(word, word_value(word)) 
-                   for word in words
-                   if word_in_dictionary(word)]
 
-    max_value = max(value for word, value in valid_words)
-    optimal_words = filterfalse(lambda word: word.value < max_value, valid_words)
-    return list(optimal_words)
+def word_value(word: str) -> int:
+    """Return scrabble value for given word. Return 0 for non-words."""
+    try:
+        word = word.replace(' ', '')
+        letter_scores = (LETTER_SCORES[letter.upper()] for letter in word)
+        return sum(letter_scores)
+    except (TypeError, KeyError, AttributeError):  # Invalid word
+        return 0

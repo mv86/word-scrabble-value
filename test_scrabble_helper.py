@@ -1,7 +1,8 @@
 """Test module for word_value."""
 import pytest
 
-from word_value import word_in_dictionary, word_value, words_values, top_n_scrabble_words
+from word_value import (new_pouch, word_in_dictionary, word_value, 
+                        words_values, top_n_scrabble_words)
 
 
 @pytest.mark.parametrize('word, rt_val', [
@@ -16,6 +17,13 @@ from word_value import word_in_dictionary, word_value, words_values, top_n_scrab
 ])
 def test_word_in_dictionary(word, rt_val):
     assert word_in_dictionary(word) == rt_val
+
+
+def test_new_pouch():
+    pouch = new_pouch()
+    assert len(pouch) == 98
+    for tile in pouch:
+        assert tile.isalpha()
 
 
 @pytest.mark.parametrize('word, rt_value', [
