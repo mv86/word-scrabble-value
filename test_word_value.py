@@ -1,10 +1,24 @@
 """Test module for word_value."""
 import pytest
 
-from word_value import word_value, words_values, top_n_scrabble_words
+from word_value import word_in_dictionary, word_value, words_values, top_n_scrabble_words
 
 
-@pytest.mark.parametrize('word, value', [
+@pytest.mark.parametrize('word, rt_val', [
+    ('', False),
+    ('true', True),
+    ('TRUE', True),
+    ('  tRuE  ', True),
+    (99, False),
+    (99.99, False),
+    (['false'], False),
+    (False, False),
+])
+def test_word_in_dictionary(word, rt_val):
+    assert word_in_dictionary(word) == rt_val
+
+
+@pytest.mark.parametrize('word, rt_value', [
     ('a', 1),
     ('word', 8),
     ('miXeD', 15),
@@ -14,10 +28,10 @@ from word_value import word_value, words_values, top_n_scrabble_words
     ('1nval$d', 0),
     (999, 0),
     (20.5, 0),
-    (False, 0),
+    (False, 0)
 ])
-def test_word_value(word, value):
-    assert word_value(word) == value
+def test_word_value(word, rt_value):
+    assert word_value(word) == rt_value
 
 
 def test_word_values():

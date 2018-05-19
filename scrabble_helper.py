@@ -76,9 +76,8 @@ def _remove_tiles(word: str, hand: List[str]):
 
 def _get_optimal_words(hand: List[str]) -> List[NamedTuple]:
     """Return optimal words from all permutations of given hand."""
-    words = set(''.join(word).lower() 
-                for i in range(2, 8)
-                for word in permutations(hand, i))
+    words = set(''.join(word)for perm_size in range(2, 8)
+                for word in permutations(hand, perm_size))
 
     valid_words = [Word(word, word_value(word)) 
                    for word in words

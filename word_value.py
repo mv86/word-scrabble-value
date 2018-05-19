@@ -35,7 +35,10 @@ with open('word_list.txt') as word_list:
 
 def word_in_dictionary(word: str) -> bool:
     """Check dictionary for word."""
-    return word in DICTIONARY
+    try:
+        return word.lower().strip() in DICTIONARY
+    except (AttributeError, TypeError):  # Not valid words
+        return False
 
 
 def new_pouch() -> List[str]:
