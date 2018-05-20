@@ -30,7 +30,7 @@ LETTER_SCORES = {letter: score for score, letters in SCRABBLE_SCORES
 
 
 with open('word_list.txt') as word_list:
-    # Set used for faster lookup. # No one letter words allowed in scrabble.
+    # Set used for faster lookup. # No 1 letter words allowed in scrabble.
     DICTIONARY = set(word.strip() for word in word_list if len(word.strip()) > 1)
 
 

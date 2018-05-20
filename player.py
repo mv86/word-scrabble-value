@@ -18,7 +18,10 @@ class Player():
         self.points = 0
 
     def __repr__(self):
-        return f'Player. Hand = {self.hand}, Points = {self.points}'
+        return 'Player()'
+
+    def __str__(self):
+        return f'Player. Hand, {self.hand}, Points, {self.points}'
 
     def fetch_tiles(self, pouch: List[str]):
         """Top up player hand to have 7 scrabble tiles."""
@@ -29,9 +32,3 @@ class Player():
     def display_hand(self):
         """Print current hand to screen."""
         print(', '.join(self.hand), '\n')
-
-    @staticmethod
-    def word_choice() -> str:
-        """Return input prompted word choice."""
-        word = input('Form a valid word --> ').lower().strip()
-        return word

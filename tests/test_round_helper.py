@@ -22,21 +22,23 @@ def test_word_in_hand(word, hand, rt_val):
     assert _word_in_hand(word, hand) == rt_val
 
 
-# @patch('builtins.input', side_effect=['trap', 'no', 'zzz', 'RAP'])
-# def test_prompt_for_word(side_input, capfd):
-#     player = Player()
-#     assert _prompt_for_word(player) == 'trap'
-#     out, _ = capfd.readouterr()
+@patch('builtins.input', side_effect=['pot', 'zzz', 'no', 'top'])
+def test_prompt_for_word(side_input):
+    player = Player()
+    player.hand = HAND
+    assert _prompt_for_word(player) == 'pot'
+    # Player re-prompted until valid word chosen
+    assert _prompt_for_word(player) == 'top'
 
 
-def test_is_valid_word(capfd):
+def test_is_valid_word(capsys):
     msg = 'Please choose a valid word!'
     assert _is_valid_word('pot', HAND)
 
     assert not _is_valid_word('zzz', HAND)  # Not in dictionary
-    out, _ = capfd.readouterr()
+    out, _ = capsys.readouterr()
     assert out.strip() == msg
 
     assert not _is_valid_word('no', HAND)  # Not in hand
-    out, _ = capfd.readouterr()
+    out, _ = capsys.readouterr()
     assert out.strip() == msg

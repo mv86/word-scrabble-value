@@ -40,7 +40,7 @@ def _prompt_for_word(player: Player) -> str:
     """Prompt player for word and validate."""
     valid_word = False
     while not valid_word:
-        word = player.word_choice()
+        word = input('Form a valid word --> ').lower().strip()
         valid_word = _is_valid_word(word, player.hand)
     return word
 
