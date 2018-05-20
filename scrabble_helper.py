@@ -30,7 +30,8 @@ LETTER_SCORES = {letter: score for score, letters in SCRABBLE_SCORES
 
 
 with open('word_list.txt') as word_list:
-    DICTIONARY = set(word.strip() for word in word_list)
+    # Set used for faster lookup. # No one letter words allowed in scrabble.
+    DICTIONARY = set(word.strip() for word in word_list if len(word.strip()) > 1)
 
 
 def word_in_dictionary(word: str) -> bool:
@@ -70,7 +71,9 @@ def top_n_scrabble_words(words=None, *, n=1) -> List[Tuple]:
 
 
 def words_values(words: Iterable) -> List[Tuple]:
-    """Take an iterable of words and return a list of tuples (word, scrabble_value).""" 
+    """Calculate scrabble value for iterable of words. 
+       Return list of tuples (word, scrabble_value).
+    """ 
     return [(word, word_value(word)) for word in words]
 
 

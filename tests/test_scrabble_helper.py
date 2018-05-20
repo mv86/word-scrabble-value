@@ -1,4 +1,4 @@
-"""Test module for word_value."""
+"""Test module for scrabble_helper."""
 import pytest
 
 from scrabble_helper import (new_pouch, word_in_dictionary, word_value, 

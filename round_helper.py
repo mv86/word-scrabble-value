@@ -62,6 +62,8 @@ def _word_in_hand(word: str, hand: List[str]) -> bool:
             if letter.lower() == tile.lower():
                 letters_in_hand.extend(test_hand.pop(idx))
                 break
+    if not word:
+        return False
     return len(word) == len(letters_in_hand)
 
 
