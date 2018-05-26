@@ -1,9 +1,19 @@
-# Word Scrabble Value
+# Mini One-Player Scrabble Game
 
-### Module to help calculate scrabble word scores.
+#### scrabble.py
+Main scrabble game
 
-Extension of pybytes challenge 01:
+#### scrabble_helper.py
+Collection of constants and functions to setup scrabble game and calculate word scores
 
-[Link Here](https://pybit.es/codechallenge01.html)
+#### round_helper.py
+Collection of helper functions for playing round of scrabble
 
-Unit tested with pytest and pytest-cov
+#### tests/
+Unit tests for game using pytest
+
+
+My take on pybytes challenges 01 & 02:
+
+[01](https://pybit.es/codechallenge01.html)
+[02](https://pybit.es/codechallenge02.html)

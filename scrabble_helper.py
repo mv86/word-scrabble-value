@@ -12,8 +12,8 @@
             word_value()
             words_values()
 """
-from typing import Iterable, List, Tuple
 import random
+from typing import Iterable, List, Tuple
 
 
 SCRABBLE_SCORES = [(1, "E A O I N R T L S U"), (2, "D G"), (3, "B C M P"),
