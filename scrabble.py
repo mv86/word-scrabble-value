@@ -1,7 +1,7 @@
 """Simple scrabble game."""
-from player import Player
-from round_helper import player_round, print_round_stats
-from scrabble_helper import new_pouch
+from game.player import Player
+from game.round_helper import player_round, print_round_stats
+from game.scrabble_helper import new_pouch
 
 # Enhancement: Add functionaliry for 2 player game
 

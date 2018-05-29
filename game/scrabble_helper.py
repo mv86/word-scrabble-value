@@ -12,6 +12,7 @@
             word_value()
             words_values()
 """
+from pathlib import Path
 import random
 from typing import Iterable, List, Tuple
 
@@ -29,8 +30,11 @@ LETTER_SCORES = {letter: score for score, letters in SCRABBLE_SCORES
                  for letter in letters.split()}
 
 
-with open('word_list.txt') as word_list:
-    # Set used for faster lookup. # No 1 letter words allowed in scrabble.
+WORD_LIST = Path.cwd() / 'game' / 'word_list.txt'
+
+
+with open(WORD_LIST) as word_list:
+    # Set used for faster lookup. # One letter words not allowed in scrabble.
     DICTIONARY = set(word.strip() for word in word_list if len(word.strip()) > 1)
 
 

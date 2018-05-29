@@ -7,8 +7,8 @@ from collections import namedtuple
 from itertools import filterfalse, permutations
 from typing import List, NamedTuple, Tuple
 
-from player import Player
-from scrabble_helper import word_value, word_in_dictionary
+from game.player import Player
+from game.scrabble_helper import word_in_dictionary, word_value
 
 
 Word = namedtuple('Word', 'word value')
